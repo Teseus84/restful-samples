@@ -45,3 +45,9 @@ $RECYCLE.BIN/
 Network Trash Folder
 Temporary Items
 .apdisk
+simple-restful/.project
+simple-restful/.settings/org.eclipse.core.resources.prefs
+simple-restful/.settings/org.eclipse.m2e.core.prefs
+simple-restful/.settings/org.eclipse.wst.validation.prefs
+simple-restful/.settings/org.eclipse.jdt.core.prefs
+simple-restful/.classpath
