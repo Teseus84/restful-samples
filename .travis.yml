@@ -1,6 +1,6 @@
 language: java
 jdk:
   - oraclejdk8
-script: mvn clean verify -f ./simple-restful/pom.xml
+script: mvn clean verify
 after_success:
    - python <(curl -s https://raw.githubusercontent.com/TouK/sputnik-ci/master/sputnik-ci.py)
