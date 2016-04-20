@@ -1,41 +1,50 @@
 package pl.lech.samples.restful;
 
+import java.net.URI;
+
 import javax.json.JsonObject;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
-import javax.ws.rs.PUT;
+import javax.ws.rs.GET;
+import javax.ws.rs.POST;
 import javax.ws.rs.Path;
-import javax.ws.rs.Produces;
-import javax.ws.rs.QueryParam;
+import javax.ws.rs.PathParam;
+import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
+import javax.ws.rs.core.Response.Status;
+import javax.ws.rs.core.UriInfo;
 
 @Path("persons")
 public class PersonResource {
 
-	private static final String PERSON_ID = "personId";
 	private static final String SPACE_BRACKET = " ";
-	private static final String LAST_NAME = "lastName";
-	private static final String FIRST_NAME = "firstName";
 
-	@PUT
-	@Path("add")
+	@GET
+	@Path("{first}-{last}")
+	public Response person(@PathParam("first") String firstName, @PathParam("last") String lastName) {
+
+		return Response.status(Status.OK).entity(String.join(SPACE_BRACKET, firstName, lastName)).build();
+	}
+
+	@POST
 	@Consumes(MediaType.APPLICATION_JSON)
-	@Produces(MediaType.TEXT_PLAIN)
-	public String addPerson(JsonObject obj) {
+	public Response add(JsonObject jsonObj, @Context UriInfo info) {
 
-		String firstName = obj.getString(FIRST_NAME);
-		String lastName = obj.getString(LAST_NAME);
+		String firstName = jsonObj.getString("firstName");
+		String lastName = jsonObj.getString("lastName");
+		
+		URI uri = info.getAbsolutePathBuilder().path("/" + firstName + "-" + lastName).build();
 
-		return String.join(SPACE_BRACKET, "Person", firstName, lastName, "added");
+		return Response.created(uri).build();
 	}
 
 	@DELETE
-	@Path("delete")
-	@Consumes(MediaType.APPLICATION_JSON)
-	@Produces(MediaType.TEXT_PLAIN)
-	public String deletePerson(@QueryParam(PERSON_ID) String personId) {
-		return String.join(SPACE_BRACKET, "Person with id:", personId, "deleted");
+	@Path("{id}")
+	public Response deletePerson(@PathParam("id") String personId) {
 
+		return Response.status(Status.OK).entity(String.join(SPACE_BRACKET, "Person with id:", personId, "deleted"))
+				.build();
 	}
 
 }
